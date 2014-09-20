@@ -17,10 +17,22 @@ IKEv2Auto is still in Alpha. It is originally IPSecAuto2 and has an amazing supp
 sslVPNauto
 ==========================
 A one-click installation script to install and configure a Cisco Anyconnect server on your Debian 7 system.
+
+
+
 ***Requirements***
-`Must add testing and Wheezy-backports system.
-`Must install 'wget','gcc','make','build-essential'.
-`Must be Debian Wheezy.
+
+
+
+Must add testing and Wheezy-backports system.
+
+
+
+Must install `wget` `gcc` `make` `build-essential`
+
+
+
+Must be Debian Wheezy.
 
 We currently ONLY support the installation on debian wheezy, no other systems.
 The solution is provided by Ocserv authored by Mark, see http://infradead.org/ .
@@ -43,7 +55,7 @@ Alex Fang.
 
 
 
-Contect
+Contact
 ==================
 email
 frjalex@gmail.com
