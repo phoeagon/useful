@@ -18,9 +18,9 @@ sudo apt-get update && sudo apt-get upgrade
 apt-get -t wheezy-backports install libgnutls28-dev
 apt-get install gnutls-bin pkg-config
 
-wget ftp://ftp.infradead.org/pub/ocserv/ocserv-0.3.2.tar.xz
-tar xvf ocserv-0.3.2.tar.xz
-cd ocserv-0.3.2
+wget ftp://ftp.infradead.org/pub/ocserv/ocserv-0.8.4.tar.xz
+tar xvf ocserv-0.8.4.tar.xz
+cd ocserv-0.8.4
 
 ./configure --prefix=/usr --sysconfdir=/etc && make && make install
 
