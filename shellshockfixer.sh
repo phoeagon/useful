@@ -82,3 +82,8 @@ elif test $x -eq 11; then
   echo "Chmod way configuring..."
   chmod o-x bash
   echo "Finishing..."
+
+else
+  echo "Invalid Operation."
+  exit
+fi
