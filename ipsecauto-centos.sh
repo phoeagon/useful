@@ -19,13 +19,13 @@ echo "|     Liscence & Legal: Released under GPLv2               |"
 echo "|        Bug Reports:    frjalex@gmail.com                 |"
 echo "|           Bug List on GitHub.   Enjoy.                   |"
 echo "+----------------------------------------------------------+"
-
-echo "Now we're Detecting the installation Environment."
-echo "Please choose your Linux Distro Type:"
-echo "1 for CentOS, 2 For Others." $ltype ; read ltype
-
-
-
+echo
+echo "@@@@@@@@@@@@@@@@@"
+echo "@@@@@NOTICE!@@@@@"
+echo "@@@@@@@@@@@@@@@@@"
+echo
+echo "This is the version for CentOS. Please make sure that you are using the correct distro." $continue1 ; read continue1
+echo
 echo "Informations Gethered...Entering Installation..."
 echo "Success. Press anyket to continue..." $ifcontinue ; read ifcontinue
 
@@ -152,7 +152,7 @@ echo "Your FQDN is" $fqdn
 echo "Your DNS1 is" $dns1
 echo "Your DNS2 is" $dns2
 echo "Your username is" $username
-echo "+-----------------------------------------------------+"
+echo "+----------------------------------------------------------+"
 
 exit 0
 
