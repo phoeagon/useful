@@ -25,10 +25,12 @@ A one-click installation script to install and configure a Cisco Anyconnect serv
 
 
 Must add testing and Wheezy-backports system.
+For adding wheezy-backports, see the tutorial at http://backports.debian.org
 
 
+Must install `wget` `gcc` `make` `build-essential`, etc.
 
-Must install `wget` `gcc` `make` `build-essential`
+***note that ocserv requires really complex dependencies. I recommend that everybody to do the compile oneself and use this script to configure. You must add missing dependencies on your own. As for the PAM support, this script will install the PAM auth library(libpam0g-dev) by default for future support of ocserv PAM. ***
 
 
 
