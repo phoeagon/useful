@@ -14,9 +14,11 @@ echo "Solutions by ocserv, client anyconnect, openconnect"
 echo "SSLVPNauto.sh Version 0.1-alpha-1 by Alex Fang. Copyright (C) Alex Fang frjalex@gmail.com All Rights Reserved"
 echo "Press Anykey to continue..." $anykey ; read anykey
 
-sudo apt-get update && sudo apt-get upgrade
+apt-get update && sudo apt-get upgrade
 apt-get -t wheezy-backports install libgnutls28-dev
 apt-get install gnutls-bin pkg-config
+apt-get install libreadline6 libreadline5 libreadline6-dev
+apt-get install libpam0g-dev
 
 wget ftp://ftp.infradead.org/pub/ocserv/ocserv-0.8.4.tar.xz
 tar xvf ocserv-0.8.4.tar.xz
@@ -48,7 +50,7 @@ certtool --generate-self-signed --load-privkey ca-key.pem --template ca.tmpl --o
 certtool --generate-privkey --outfile server-key.pem
 cat << _EOF_ > server.tmpl
 cn = "$fqdnname"
-o = "$oname"
+organization = "$oname"
 serial = 2
 expiration_days = 9999
 signing_key
@@ -65,7 +67,7 @@ mkdir /etc/ocserv
 cd /etc/ocserv
 wget turin.theredian.org/ocserv.conf
 echo "Counfiguration complete. Now adding 1 user for u. Username:" $username ; read username
-sudo ocpasswd -c /etc/ocserv/ocpasswd $username
+ ocpasswd -c /etc/ocserv/ocpasswd $username
 
 #Manage App Script
 cd /etc/init.d
