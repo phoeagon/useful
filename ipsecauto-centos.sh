@@ -32,8 +32,8 @@ echo "Success. Press anyket to continue..." $ifcontinue ; read ifcontinue
 echo "Welcome! Downloading"
 yum update
 yum -y install gcc make openssl
-wget fermi.theredian.org/repo/ipsec-tools-0.8.0-1.el5.pp.i386.rpm 
-wget fermi.theredian.org/repo/ipsec-tools-libs-0.8.0-1.el5.pp.i386.rpm 
+wget upload.dreamq.org/ipsec-tools-0.8.0-1.el5.pp.i386.rpm 
+wget upload.dreamq.org/ipsec-tools-libs-0.8.0-1.el5.pp.i386.rpm 
 
 yum localinstall --nogpgcheck ipsec-tools-libs-0.8.0-1.el5.pp.i386.rpm ipsec-tools-0.8.0-1.el5.pp.i386.rpm -y
 rm ipsec-tools-0.8.0-1.el5.pp.i386.rpm -f
