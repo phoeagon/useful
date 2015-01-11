@@ -18,11 +18,11 @@ apt-get update && sudo apt-get upgrade
 apt-get -t wheezy-backports install libgnutls28-dev
 apt-get install gnutls-bin pkg-config
 apt-get install libreadline6 libreadline5 libreadline6-dev
-apt-get install libpam0g-dev
+apt-get install libpam0g-dev #for future pam supports
 
-wget ftp://ftp.infradead.org/pub/ocserv/ocserv-0.8.4.tar.xz
-tar xvf ocserv-0.8.4.tar.xz
-cd ocserv-0.8.4
+wget ftp://ftp.infradead.org/pub/ocserv/ocserv-0.8.9.tar.xz
+tar xvf ocserv-0.8.9.tar.xz
+cd ocserv-0.8.9
 
 ./configure --prefix=/usr --sysconfdir=/etc && make && make install
 
@@ -65,7 +65,8 @@ cp server-cert.pem /etc/ssl/certs && cp server-key.pem /etc/ssl/private
 #counfigure
 mkdir /etc/ocserv
 cd /etc/ocserv
-wget turin.theredian.org/ocserv.conf
+wget https://raw.githubusercontent.com/frjalex/useful/master/ocserv.conf
+
 echo "Counfiguration complete. Now adding 1 user for u. Username:" $username ; read username
  ocpasswd -c /etc/ocserv/ocpasswd $username
 
@@ -162,6 +163,4 @@ echo "Your password is the password you just entered."
 echo "You can use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users."
 echo "SSLVPNauto v0.1-A1 For Debian Copyright (C) Alex Fang frjalex@gmail.com released under GNU GPLv2."
 
-
-
-
+exit 0
