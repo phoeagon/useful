@@ -65,7 +65,7 @@ cp server-cert.pem /etc/ssl/certs && cp server-key.pem /etc/ssl/private
 #counfigure
 mkdir /etc/ocserv
 cd /etc/ocserv
-wget https://raw.githubusercontent.com/frjalex/useful/master/ocserv.conf
+wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv.conf
 
 echo "Counfiguration complete. Now adding 1 user for u. Username:" $username ; read username
  ocpasswd -c /etc/ocserv/ocpasswd $username
