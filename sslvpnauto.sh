@@ -14,6 +14,7 @@ echo "Solutions by ocserv, client anyconnect, openconnect"
 echo "SSLVPNauto.sh Version 0.1-alpha-1 by Alex Fang. Copyright (C) Alex Fang frjalex@gmail.com All Rights Reserved"
 echo "Press Anykey to continue..." $anykey ; read anykey
 
+echo "deb http://ftp.debian.org/debian wheezy-backports main contrib non-free" >> /etc/apt/sources.list
 apt-get update && sudo apt-get upgrade
 apt-get -t wheezy-backports install libgnutls28-dev
 apt-get install gnutls-bin pkg-config
