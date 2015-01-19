@@ -1,17 +1,19 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides: ocserv
-# Required-Start: $remote_fs $syslog
-# Required-Stop: $remote_fs $syslog
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
+# Provides:          ocserv
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
 ### END INIT INFO
 # Copyright Rene Mayrhofer, Gibraltar, 1999
 # This script is distibuted under the GPL
+ 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 DAEMON=/usr/sbin/ocserv
 PIDFILE=/var/run/ocserv.pid
 DAEMON_ARGS="-c /etc/ocserv/ocserv.conf"
+ 
 case "$1" in
 start)
 if [ ! -r $PIDFILE ]; then
@@ -61,4 +63,5 @@ echo "Usage: /etc/init.d/ocserv {start|stop|restart|force-reload|status}"
 exit 1
 ;;
 esac
+ 
 exit 0
