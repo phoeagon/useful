@@ -98,21 +98,21 @@ echo -e " \033[41;37m Now,We are making Your CA for ocserv! \033[0m"
 
 echo "Your CA's name(Default :ocvpn):" $caname ; read caname
     if [ "caname" = "" ]; then
-        caname=ocvpn
+        caname="ocvpn"
     fi
 echo "Your CA's name:$caname"
 
 
 echo "Your Organization name(Default :ocvpn):" $ogname ; read ogname
     if [ "ogname" = "" ]; then
-        ogname=ocvpn
+        ogname="ocvpn"
     fi
 echo "Your Organization name:$ogname"
 
 
 echo "Your Company name(Default :ocvpn):" $oname ; read oname
     if [ "oname" = "" ]; then
-        oname=ocvpn
+        oname="ocvpn"
     fi
 echo "Your Company name:$oname"
 
