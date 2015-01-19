@@ -3,9 +3,15 @@
 # turn on IP forwarding
 sysctl -w net.ipv4.ip_forward=1
 
+#get gateway
+gw_intf2=`ip route show | grep '^default' | sed -e 's/.* dev \([^ ]*\).*/\1/'`
 
 # turn on NAT over default gateway and VPN
-iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o `ip route show | grep '^default' | sed -e 's/.* dev \([^ ]*\).*/\1/'` -j MASQUERADE
+
+if !(iptables-save -t nat | grep -q "$gw_intf2 (ocserv)"); then
+iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o $gw_intf2 -m comment --comment "$gw_intf2 (ocserv)"-j MASQUERADE
+fi
+
 iptables -A FORWARD -s 192.168.10.0/24 -j ACCEPT
 
 # turn on MSS fix
