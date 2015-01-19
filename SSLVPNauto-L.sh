@@ -63,10 +63,12 @@ function tar_ocserv_install(){
    cd ~
    wget ftp://ftp.infradead.org/pub/ocserv/ocserv-0.8.9.tar.xz
    tar xvf ocserv-0.8.9.tar.xz
+   rm -rf ocserv-0.8.9.tar.xz
    cd ocserv-0.8.9
    ./configure --prefix=/usr --sysconfdir=/etc && make && make install
    mkdir /etc/ocserv
    cp doc/profile.xml /etc/ocserv
+   rm -rf ocserv-0.8.9
   
 }
 function git_ocserv_install(){
