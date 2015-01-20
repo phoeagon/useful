@@ -197,7 +197,7 @@ _EOF_
 
 chmod +x ocserv-sysctl.sh
 
-ocserv_port=`cat /etc/ocserv/ocserv.conf | grep '^tcp-port' | sed -e 's/tcp-port = //g'`
+ocserv_port=`cat /etc/ocserv/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g'`
 
 }
 function stop_ocserv(){
