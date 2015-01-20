@@ -98,32 +98,38 @@ clear
 
 echo -e " \033[41;37m Now,We are making Your CA for ocserv! \033[0m"
 
-echo "Your CA's name(Default :ocvpn):" $caname ; read caname
-    if [ "caname" = "" ]; then
+# Get CA's name
+    echo "Your CA's name:"
+    read -p "(Default :ocvpn):" caname
+    if [ "$caname" = "" ]; then
         caname="ocvpn"
     fi
-echo "Your CA's name:$caname"
-
-
-echo "Your Organization name(Default :ocvpn):" $ogname ; read ogname
-    if [ "ogname" = "" ]; then
+    echo "Your CA's name:$caname"
+    echo "####################################"
+# Get Organization name
+    echo "Your Organization name:"
+    read -p "(Default :ocvpn):" ogname
+    if [ "$ogname" = "" ]; then
         ogname="ocvpn"
     fi
-echo "Your Organization name:$ogname"
-
-
-echo "Your Company name(Default :ocvpn):" $oname ; read oname
-    if [ "oname" = "" ]; then
+    echo "Your Organization name:$ogname"
+    echo "####################################"
+# Get Company name
+    echo "Your Company name:"
+    read -p "(Default :ocvpn):" oname
+    if [ "$oname" = "" ]; then
         oname="ocvpn"
     fi
-echo "Your Company name:$oname"
-
-
-echo "Your server's FQDN(Default :$hostname):" $fqdnname;read fqdnname
-    if [ "fqdnname" = "" ]; then
+    echo "Your Company name:$oname"
+    echo "####################################"
+# Get server's FQDN
+    echo "Your server's FQDN:"
+    read -p "(Default :$hostname):" fqdnname
+    if [ "$fqdnname" = "" ]; then
         fqdnname=hostname
     fi
-echo "Your server's FQDN:$fqdnname"
+    echo "Your server's FQDN:$fqdnname"
+    echo "####################################"
 
 
 #server-ca
