@@ -228,7 +228,7 @@ function show_ocserv(){
 clear
 
 echo "Config finished."
-echo -e "\033[41;37m Your server domain is \033[0m" $fqdnname ":$ocserv_port"
+echo -e "\033[41;37m Your server domain is \033[0m" "$fqdnname:$ocserv_port"
 #echo -e "\033[41;37m Your username is \033[0m 8964" 
 #echo -e "\033[41;37m Your password is \033[0m 8964"
 #echo -e "\033[41;37m You can use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users. \033[0m "
