@@ -68,6 +68,7 @@ function tar_ocserv_install(){
    ./configure --prefix=/usr --sysconfdir=/etc && make && make install
    mkdir /etc/ocserv
    cp doc/profile.xml /etc/ocserv
+   cd ..
    rm -rf ocserv-0.8.9
   
 }
