@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 #===============================================================================================
-#   System Required:  Only Debian 7+!!! 
+#   System Required:  Only Debian 7+!!! （x64 ok）
 #   Description:  Install OpenConnect VPN server for Debian
 #   SSLVPNauto-L v0.1 For Debian Copyright (C) liyangyijie@Gmail released under GNU GPLv2
 #   SSLVPNauto-L v0.1 Is Based On SSLVPNauto v0.1-A1
