@@ -170,7 +170,7 @@ cd /etc/ocserv
 wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv.conf --no-check-certificate
 wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv-sysctl.sh
 chmod +x ocserv-sysctl.sh
-mkdir ocpasswd
+touch ocpasswd
 chmod 600 ocpasswd
 
 }
