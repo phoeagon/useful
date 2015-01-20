@@ -169,8 +169,8 @@ cd /etc/ocserv
 wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv.conf --no-check-certificate
 wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv-sysctl.sh
 chmod +x ocserv-sysctl.sh
-
-ocserv_port=`cat /etc/ocserv/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g'`
+mkdir ocpasswd
+chmod 600 ocpasswd
 
 }
 function stop_ocserv(){
@@ -198,8 +198,8 @@ if [ $? -ne 0 ]; then
 fi
 }
 function show_ocserv(){
+ocserv_port=`cat /etc/ocserv/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g'`
 clear
-
 echo "Config finished."
 echo -e "\033[41;37m Your server domain is \033[0m" "$fqdnname:$ocserv_port"
 #echo -e "\033[41;37m Your username is \033[0m 8964" 
