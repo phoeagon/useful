@@ -65,6 +65,7 @@ function tar_ocserv_install(){
    tar xvf ocserv-0.8.9.tar.xz
    rm -rf ocserv-0.8.9.tar.xz
    cd ocserv-0.8.9
+   sed -i 's/#define MAX_CONFIG_ENTRIES 64/#define MAX_CONFIG_ENTRIES 200/g' src/vpn.h
    ./configure --prefix=/usr --sysconfdir=/etc && make && make install
    mkdir /etc/ocserv
    cp doc/profile.xml /etc/ocserv
