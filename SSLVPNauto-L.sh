@@ -12,7 +12,7 @@ export PATH
 
 clear
 echo "#############################################################"
-echo "# Install Install OpenConnect VPN server for Debian 7+"
+echo "# Install  OpenConnect VPN server for Debian 7+"
 echo "#############################################################"
 echo ""
 
