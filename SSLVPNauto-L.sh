@@ -93,7 +93,7 @@ cd CAforOC
 #get CA info
 hostname=$(wget -qO- ipv4.icanhazip.com)
    if [ -z $hostname ]; then
-      hostname=`curl -s ifconfig.me/ip`
+      hostname=`curl -s liyangyijie.sinaapp.com/ip/`
    fi
    
 clear
