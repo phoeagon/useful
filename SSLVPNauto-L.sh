@@ -127,7 +127,7 @@ echo -e " \033[41;37m Now,We are making Your CA for ocserv! \033[0m"
     echo "Your server's FQDN:"
     read -p "(Default :$hostname):" fqdnname
     if [ "$fqdnname" = "" ]; then
-        fqdnname=hostname
+        fqdnname=$hostname
     fi
     echo "Your server's FQDN:$fqdnname"
     echo "####################################"
