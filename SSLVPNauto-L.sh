@@ -84,7 +84,7 @@ function git_ocserv_install(){
 function make_ocserv_ca(){
 
 #one file
-cd ~
+cd /etc/ocserv
 mkdir CAforOC
 cd CAforOC
 
