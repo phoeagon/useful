@@ -169,7 +169,7 @@ cp server-cert.pem /etc/ocserv/ && cp server-key.pem /etc/ocserv/
 function config_ocserv(){
 cd /etc/ocserv
 wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv.conf --no-check-certificate
-wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv-sysctl.sh
+wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocserv-sysctl.sh  --no-check-certificate
 chmod +x ocserv-sysctl.sh
 touch ocpasswd
 chmod 600 ocpasswd
