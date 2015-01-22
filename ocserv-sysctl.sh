@@ -17,9 +17,17 @@ if !(iptables-save -t nat | grep -q "$gw_intf2 (ocserv)"); then
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o $gw_intf2 -m comment --comment "$gw_intf2 (ocserv)" -j MASQUERADE
 fi
 
-iptables -A FORWARD -s $ocserv_ip4work/$ocserv_ip4mask -j ACCEPT
-iptables -A INPUT -p tcp --dport $ocserv_tcpport -j ACCEPT
-iptables -A INPUT -p udp --dport $ocserv_udpport -j ACCEPT
+if !(iptables-save -t filter | grep -q "$gw_intf2 (ocserv2)"); then
+iptables -A FORWARD -s $ocserv_ip4work/$ocserv_ip4mask -m comment --comment "$gw_intf2 (ocserv2)" -j ACCEPT
+fi
+
+if !(iptables-save -t filter | grep -q "$gw_intf2 (ocserv3)"); then
+iptables -A INPUT -p tcp --dport $ocserv_tcpport -m comment --comment "$gw_intf2 (ocserv3)" -j ACCEPT
+fi
+
+if !(iptables-save -t filter | grep -q "$gw_intf2 (ocserv4)"); then
+iptables -A INPUT -p udp --dport $ocserv_udpport -m comment --comment "$gw_intf2 (ocserv4)" -j ACCEPT
+fi
 
 # turn on MSS fix
 # MSS = MTU - TCP header - IP header
