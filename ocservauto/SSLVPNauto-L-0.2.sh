@@ -127,7 +127,7 @@ function check_Required {
     if [ $? -ne 0 ]; then
 	oc_jessie="n"
 	elif
-    sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list	
+    sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
     fi
 	print_info "sources ok"
 	clear
