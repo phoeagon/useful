@@ -29,7 +29,7 @@ iptables -D INPUT -p tcp --dport $ocserv_tcpport -m comment --comment "$gw_intf2
 iptables -D INPUT -p udp --dport $ocserv_udpport -m comment --comment "$gw_intf2 (ocserv4)" -j ACCEPT
 
 
-# turn on MSS fix
+# turn off MSS fix
 # MSS = MTU - TCP header - IP header
 
 iptables -t mangle -D FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "$gw_intf2 (ocserv5)" -j TCPMSS --clamp-mss-to-pmtu
