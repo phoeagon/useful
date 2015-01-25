@@ -115,7 +115,7 @@ function check_Required {
         ocserv_hostname=$(wget -qO- ipv4.icanhazip.com)
     if [ $? -ne 0 -o -z $ocserv_hostname ]; then
         ocserv_hostname=`curl -s liyangyijie.sinaapp.com/ip/`
-    fi
+        fi
 	print_info "get ip ok"
 	#get default port
 	print_info "getting default port from net......"
