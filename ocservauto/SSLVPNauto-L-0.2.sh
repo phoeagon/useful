@@ -126,8 +126,8 @@ function check_Required {
 	cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
 	oc_jessie="n"
-	elif
-    sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
+	else
+        sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
     fi
 	print_info "sources ok"
 	clear
