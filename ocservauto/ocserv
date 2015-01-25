@@ -32,7 +32,7 @@ fi
 ;;
 stop)
 echo -n "Stopping OpenConnect VPN Server Daemon: "
-bash /etc/ocserv/start-ocserv-sysctl.sh
+bash /etc/ocserv/stop-ocserv-sysctl.sh
 start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON
 echo "[ok]"
 rm -f $PIDFILE
