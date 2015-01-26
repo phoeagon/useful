@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # turn on IP forwarding
-sysctl -w net.ipv4.ip_forward=1
+sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1
 
 #get gateway
 gw_intf2=`ip route show | grep '^default' | sed -e 's/.* dev \([^ ]*\).*/\1/'`
