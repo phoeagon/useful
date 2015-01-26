@@ -128,12 +128,12 @@ function check_Required {
         ocserv_hostname=`curl -s liyangyijie.sinaapp.com/ip/`
         fi
 	print_info "get ip ok"
-	#get default port
+	#get default port 从网络配置中获取默认使用端口以及本机ip
 	print_info "getting default port from net......"
 	ocserv_tcpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g')
 	ocserv_udpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^udp-port' | sed 's/udp-port = //g')
 	print_info "get default port ok"
-	#sources check ,del this sources 
+	#sources check ,del this sources 去掉测试源 
 	cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
 	oc_jessie="n"
@@ -164,7 +164,7 @@ function print_warn {
 function get_Custom_configuration(){
 
         echo "####################################"
-#Whether to make a Self-signed CA
+#Whether to make a Self-signed CA 是否需要制作自签名证书
         print_info "Do you need make a Self-signed CA for your server?(y/n)"
         read -p "(Default :y):" self_signed_ca
 if [ "$self_signed_ca" = "n" ]; then
@@ -216,7 +216,7 @@ else
     print_info "Your server's FQDN:$fqdnname"
 fi    
     echo "####################################"    
-#set max router rulers
+#set max router rulers 最大路由规则限制数目
 	print_info "The maximum number of routing table rules?(Cisco Anyconnect client limit: 200)"
 	read -p "(Default :200):" max_router
 if [ "$max_router" = "" ]; then
@@ -225,7 +225,7 @@ fi
 	print_info "$max_router"
 	echo "####################################"
 
-#which port to use
+#which port to use 选择验证端口
         print_info "which port to use?"
         read -p "(Default :$ocserv_tcpport_Default):" which_port
 if [ "$which_port" != "" ]; then
@@ -238,7 +238,7 @@ fi
     
     echo "####################################"
 	
-#Boot from the start
+#Boot from the start 是否开机自起
     print_info "Boot from the start?(y/n)"
     read -p "(Default :y):" ocserv_boot_start
     if [ "$ocserv_boot_start" = "n" ]; then
@@ -293,11 +293,11 @@ function add_a_user(){
 
 # pre_install
 function pre_install(){
-   #keep kernel
+   #keep kernel 防止某些情况下内核升级
    echo linux-image-`uname -r` hold | sudo dpkg --set-selections
    apt-get upgrade -y
    
-   #no update from test sources
+   #no update from test sources 将测试源优先级调低 防止其他测试包安装
    if [ ! -d /etc/apt/preferences.d ];then
        mkdir /etc/apt/preferences.d
    fi
@@ -313,7 +313,7 @@ Pin: release jessie
 Pin-Priority: 60
 EOF
  
-   #sources check, Do not change the order
+   #sources check, Do not change the order 不要轻易改变升级顺序
    cat /etc/apt/sources.list | grep 'deb http://ftp.debian.org/debian wheezy-backports main contrib non-free' > /dev/null 2>&1
    if [ $? -ne 0 ]; then
    echo "deb http://ftp.debian.org/debian wheezy-backports main contrib non-free" >> /etc/apt/sources.list
@@ -322,11 +322,10 @@ EOF
    
    apt-get update   
    
-    apt-get install -y libprotobuf-c0-dev
-    apt-get install -y libreadline6 libreadline5 libreadline6-dev libgmp3-dev m4 gcc pkg-config make gnutls-bin libtalloc-dev build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libreadline-dev libnl-route-3-dev libpcl1-dev libopts25-dev autogen libseccomp-dev libnl-nf-3-dev debhelper
-    apt-get install -y -qq libreadline6 libreadline5 libreadline6-dev libgmp3-dev m4 gcc pkg-config make gnutls-bin libtalloc-dev build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libreadline-dev libnl-route-3-dev libpcl1-dev libopts25-dev autogen libseccomp-dev libnl-nf-3-dev debhelper
-    apt-get install -y -t wheezy-backports  libgnutls28-dev
-
+   apt-get install -y -t wheezy-backports  libgnutls28-dev 
+   
+   apt-get install -y libprotobuf-c0-dev 
+   apt-get install -y libreadline6 libreadline5 libreadline6-dev libgmp3-dev m4 gcc pkg-config make gnutls-bin libtalloc-dev build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libreadline-dev libnl-route-3-dev libpcl1-dev libopts25-dev autogen  libnl-nf-3-dev debhelper libseccomp-dev libgnutls-dev libtasn1-6-dev
    
    
    #sources check @ check Required
@@ -368,6 +367,13 @@ function tar_ocserv_install(){
 #have to use "" then $ work ,set router limit
    sed -i "s/#define MAX_CONFIG_ENTRIES 64/#define MAX_CONFIG_ENTRIES $max_router/g" src/vpn.h
    ./configure --prefix=/usr --sysconfdir=/etc && make && make install
+   
+#check install 检测编译安装是否成功
+   if [ ! -f /usr/sbin/ocserv ]
+   then
+	    die "ocserv install failure,check dependencies!"
+   fi
+   
    mkdir -p /etc/ocserv/CAforOC
    cp doc/profile.xml /etc/ocserv
    cp doc/dbus/org.infradead.ocserv.conf /etc/dbus-1/system.d/
@@ -387,8 +393,8 @@ function tar_ocserv_install(){
    chmod +x start-ocserv-sysctl.sh
    chmod +x stop-ocserv-sysctl.sh
    touch ocpasswd
-   chmod 600 ocpasswd
-   
+   chmod 600 ocpasswd   
+ 
    print_info "ocserv install ok"
 }
 
@@ -444,6 +450,10 @@ _EOF_
 
 certtool --generate-certificate --load-privkey server-key.pem --load-ca-certificate ca-cert.pem --load-ca-privkey ca-key.pem --template server.tmpl --outfile server-cert.pem
 
+if [ ! -f /etc/ocserv/server-cert.pem ] || [ ! -f /etc/ocserv/server-key.pem ]; then	
+	die "CA or KEY NOT Found , make failure!"
+fi
+
 cp server-cert.pem /etc/ocserv/ && cp server-key.pem /etc/ocserv/
    
 print_info "Self-signed CA for ocserv ok"
@@ -470,7 +480,7 @@ function set_ocserv_conf(){
 #default domain 
 sed -i "s@#default-domain = example.com@default-domain = $fqdnname@" /etc/ocserv/ocserv.conf 
   
-#Boot from the start 
+#Boot from the start 开机自启
 if [ "$ocserv_boot_start" = "" ]; then
 sudo update-rc.d ocserv defaults
 fi
