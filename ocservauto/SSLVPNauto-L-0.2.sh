@@ -480,7 +480,7 @@ sed -i "s@#default-domain = example.com@default-domain = $fqdnname@" /etc/ocserv
   
 #Boot from the start 开机自启
 if [ "$ocserv_boot_start" = "" ]; then
-sudo update-rc.d ocserv defaults
+sudo insserv ocserv
 fi
 
 #add a user
