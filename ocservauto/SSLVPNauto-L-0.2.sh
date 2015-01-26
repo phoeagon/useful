@@ -536,7 +536,7 @@ if [ $? -eq 0 ]; then
     echo -e "\033[41;37m Your username is \033[0m" "$username"
     echo -e "\033[41;37m Your password is \033[0m" "$password"
     print_warn "You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users. "
-    print_warn "You can stop ocserv by ' /etc/init.d/ocserv start ' !"
+    print_warn "You can stop ocserv by ' /etc/init.d/ocserv stop ' !"
     print_wart "Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
     echo ""    
     print_info "enjoy it!"
