@@ -52,7 +52,7 @@ $0 start
 ;;
 status)
 if [ ! -r $PIDFILE ]; then
-# no pid file, process doesn't seem to be running correctly
+echo "no pid file, process doesn't seem to be running correctly"
 exit 3
 fi
 PID=`cat $PIDFILE | sed 's/ //g'`
@@ -60,13 +60,13 @@ EXE=/proc/$PID/exe
 if [ -x "$EXE" ] &&
 [ "`ls -l \"$EXE\" | cut -d'>' -f2,2 | cut -d' ' -f2,2`" = \
 "$DAEMON" ]; then
-# ok, process seems to be running
+echo "ok, process seems to be running"
 exit 0
 elif [ -r $PIDFILE ]; then
-# process not running, but pidfile exists
+echo "process not running, but pidfile exists"
 exit 1
 else
-# no lock file to check for, so simply return the stopped status
+echo "no lock file to check for, so simply return the stopped status"
 exit 3
 fi
 ;;
