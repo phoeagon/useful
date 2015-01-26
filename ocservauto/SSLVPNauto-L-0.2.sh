@@ -328,7 +328,7 @@ function pre_install(){
    
    #sources check @ check Required
 
-#   echo "deb ftp://ftp.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list 
+   echo "deb ftp://ftp.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list 
   
    
    #update dependencies too new ~
@@ -341,9 +341,9 @@ function pre_install(){
    sed -i 's@deb http://ftp.debian.org/debian wheezy-backports main contrib non-free@@g' /etc/apt/sources.list
    fi
    
-#   if [ "$oc_jessie" = "n" ]; then
-#   sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
-#   fi
+   if [ "$oc_jessie" = "n" ]; then
+   sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
+   fi
    
    #keep update
 #   rm -rf /etc/apt/preferences.d/my_ocserv_preferences
@@ -533,9 +533,11 @@ if [ $? -eq 0 ]; then
 	else
 	echo ""
     echo -e "\033[41;37m Your server domain is \033[0m" "$fqdnname:$ocserv_port"
-	echo -e "\033[41;37m Your username is \033[0m" "$username"
-	echo -e "\033[41;37m Your password is \033[0m" "$password"
-    echo -e "\033[41;37m You can use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users. \033[0m "
+    echo -e "\033[41;37m Your username is \033[0m" "$username"
+    echo -e "\033[41;37m Your password is \033[0m" "$password"
+    print_warn "You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users. "
+    print_warn "You can stop ocserv by ' /etc/init.d/ocserv start ' !"
+    print_wart "Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
     echo ""    
     print_info "enjoy it!"
     echo ""
@@ -544,7 +546,8 @@ elif [ "$self_signed_ca" = "n" -a "$ca_login" = "" ]; then
 	print_warn "1,You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
 	print_warn "2,You have to put your CA and Key to /etc/ocserv !!!"
 	print_warn "3,You have to start ocserv by '/etc/init.d/ocserv start'!"
-	print_warn "4,You can use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users."
+	print_warn "4,You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users."
+	print_wart "5,Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
 	echo -e "\033[41;37m Your username is \033[0m" "$username"
 	echo -e "\033[41;37m Your password is \033[0m" "$password"
 	
