@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #===============================================================================================
-#   System Required:  Only Debian 7+!!! （x64 ok）
+#   System Required:  Only Debian 7+!!!
 #   Description:  Install OpenConnect VPN server for Debian
 #   SSLVPNauto-L v0.2 For Debian Copyright (C) liyangyijie@Gmail released under GNU GPLv2
 #   SSLVPNauto-L v0.2 Is Based On SSLVPNauto v0.1-A1
@@ -535,9 +535,9 @@ if [ $? -eq 0 ]; then
     echo -e "\033[41;37m Your server domain is \033[0m" "$fqdnname:$ocserv_port"
     echo -e "\033[41;37m Your username is \033[0m" "$username"
     echo -e "\033[41;37m Your password is \033[0m" "$password"
-    print_warn "You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users. "
-    print_warn "You can stop ocserv by ' /etc/init.d/ocserv stop ' !"
-    print_warn "Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
+    print_warn " You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users. "
+    print_warn " You can stop ocserv by ' /etc/init.d/ocserv stop ' !"
+    print_warn " Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
     echo ""    
     print_info "enjoy it!"
     echo ""
