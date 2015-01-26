@@ -297,10 +297,10 @@ function pre_install(){
    echo linux-image-`uname -r` hold | sudo dpkg --set-selections
    apt-get upgrade -y
    
-   #no update from test sources 将测试源优先级调低 防止其他测试包安装
-   if [ ! -d /etc/apt/preferences.d ];then
-       mkdir /etc/apt/preferences.d
-   fi
+#   #no update from test sources 将测试源优先级调低 防止其他测试包安装
+#  if [ ! -d /etc/apt/preferences.d ];then
+#       mkdir /etc/apt/preferences.d
+#  fi
 #  cat > /etc/apt/preferences.d/my_ocserv_preferences<<EOF
 #Package: *
 #Pin: release wheezy
@@ -328,7 +328,7 @@ function pre_install(){
    
    #sources check @ check Required
 
-   echo "deb ftp://ftp.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list 
+#   echo "deb ftp://ftp.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list 
   
    
    #update dependencies too new ~
@@ -341,12 +341,12 @@ function pre_install(){
    sed -i 's@deb http://ftp.debian.org/debian wheezy-backports main contrib non-free@@g' /etc/apt/sources.list
    fi
    
-   if [ "$oc_jessie" = "n" ]; then
-   sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
-   fi
+#   if [ "$oc_jessie" = "n" ]; then
+#   sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
+#   fi
    
    #keep update
-   rm -rf /etc/apt/preferences.d/my_ocserv_preferences
+#   rm -rf /etc/apt/preferences.d/my_ocserv_preferences
    apt-get update
    
    print_info "dependencies  ok"
