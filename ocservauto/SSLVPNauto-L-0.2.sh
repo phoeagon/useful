@@ -288,10 +288,10 @@ EOF
    echo "deb ftp://ftp.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list 
   
    
-   #update dependencies
-   apt-get update
-   apt-get install -y -t jessie  libprotobuf-c-dev libhttp-parser-dev
-   apt-get install -y -qq -t jessie  libprotobuf-c-dev libhttp-parser-dev
+   #update dependencies too new ~
+   #apt-get update
+   #apt-get install -y -t jessie  libprotobuf-c-dev libhttp-parser-dev
+   #apt-get install -y -qq -t jessie  libprotobuf-c-dev libhttp-parser-dev
    
    #if sources del
    if [ "$oc_wheezy_backports" = "n" ]; then
