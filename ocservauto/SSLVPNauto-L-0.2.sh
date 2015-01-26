@@ -448,7 +448,7 @@ _EOF_
 
 certtool --generate-certificate --load-privkey server-key.pem --load-ca-certificate ca-cert.pem --load-ca-privkey ca-key.pem --template server.tmpl --outfile server-cert.pem
 
-if [ ! -f /etc/ocserv/server-cert.pem ] || [ ! -f /etc/ocserv/server-key.pem ]; then	
+if [ ! -f server-cert.pem ] || [ ! -f server-key.pem ]; then	
 	die "CA or KEY NOT Found , make failure!"
 fi
 
