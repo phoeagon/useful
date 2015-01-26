@@ -424,6 +424,10 @@ function set_ocserv_conf(){
 #default domain 
 sed -i "s@#default-domain = example.com@default-domain = $fqdnname@" /etc/ocserv/ocserv.conf 
   
+#Boot from the start 
+if [ "$ocserv_boot_start" = "" ]; then
+sudo update-rc.d ocserv defaults
+fi
 
 #set ca_login
   if [ "$ca_login" = "y" ]; then
