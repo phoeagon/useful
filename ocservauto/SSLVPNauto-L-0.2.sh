@@ -537,7 +537,7 @@ if [ $? -eq 0 ]; then
     echo -e "\033[41;37m Your password is \033[0m" "$password"
     print_warn "You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users. "
     print_warn "You can stop ocserv by ' /etc/init.d/ocserv stop ' !"
-    print_wart "Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
+    print_warn "Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
     echo ""    
     print_info "enjoy it!"
     echo ""
@@ -547,7 +547,7 @@ elif [ "$self_signed_ca" = "n" -a "$ca_login" = "" ]; then
 	print_warn "2,You have to put your CA and Key to /etc/ocserv !!!"
 	print_warn "3,You have to start ocserv by '/etc/init.d/ocserv start'!"
 	print_warn "4,You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users."
-	print_wart "5,Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
+	print_warn "5,Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
 	echo -e "\033[41;37m Your username is \033[0m" "$username"
 	echo -e "\033[41;37m Your password is \033[0m" "$password"
 	
