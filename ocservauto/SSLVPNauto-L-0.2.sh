@@ -301,17 +301,17 @@ function pre_install(){
    if [ ! -d /etc/apt/preferences.d ];then
        mkdir /etc/apt/preferences.d
    fi
-   cat > /etc/apt/preferences.d/my_ocserv_preferences<<EOF
-Package: *
-Pin: release wheezy
-Pin-Priority: 900
-Package: *
-Pin: release wheezy-backports
-Pin-Priority: 90
-Package: *
-Pin: release jessie
-Pin-Priority: 60
-EOF
+#  cat > /etc/apt/preferences.d/my_ocserv_preferences<<EOF
+#Package: *
+#Pin: release wheezy
+#Pin-Priority: 900
+#Package: *
+#Pin: release wheezy-backports
+#Pin-Priority: 90
+#Package: *
+#Pin: release jessie
+#Pin-Priority: 60
+#EOF
  
    #sources check, Do not change the order 不要轻易改变升级顺序
    cat /etc/apt/sources.list | grep 'deb http://ftp.debian.org/debian wheezy-backports main contrib non-free' > /dev/null 2>&1
