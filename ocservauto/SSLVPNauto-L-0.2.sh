@@ -15,13 +15,13 @@ echo "# Install  OpenConnect VPN server for Debian 7+"
 echo "#############################################################"
 echo ""
 
-# install 
+# install 安装主体
 function install_OpenConnect_VPN_server(){
     
-#check system and get IP port ,del sources
+#check system , get IP and port ,del test sources 检测系统 获取本机公网ip、默认验证端口 去除测试源
     check_Required
 	
-#custom-configuration or not
+#custom-configuration or not 自定义安装与否
     print_info "Do you want to install ocserv with Custom Configuration?(y/n)"
     read -p "(Default :n):" Custom_config_ocserv
     if [ "$Custom_config_ocserv" = "y" ]; then
@@ -31,8 +31,11 @@ function install_OpenConnect_VPN_server(){
 	else
 	print_info "Automatic installation."
     fi
+
+#add a user 增加初始一个用户
+    add_a_user
 	
-#press any key to start
+#press any key to start 任意键开始
     get_char(){
         SAVEDSTTY=`stty -g`
         stty -echo
@@ -45,27 +48,35 @@ function install_OpenConnect_VPN_server(){
     echo ""
     print_info "press any key to start...or Press Ctrl+C to cancel"
     ocserv_char=`get_char`
-    	
+
+#install dependencies 安装依赖文件
 	pre_install
 	
+#install ocserv 编译安装软件	
 	tar_ocserv_install
-	
+
+#make self-signd server-ca 制作服务器自签名证书	
 	if [ "$self_signed_ca" = "" ]; then
 	make_ocserv_ca
 	fi
-	
+
+#test 证书登录 测试中	
 	if [ "$ca_login" = "y" ]; then
 	ca_login_ocserv	
 	fi
-	
+
+#configuration 设定软件相关选项	
 	set_ocserv_conf
-	
+
+#stop all 关闭所有正在运行的ocserb软件	
 	stop_ocserv
-	
+
+#No certificate , then do not start 没有服务器证书不启动	
 	if [ "$self_signed_ca" = "" ]; then	
 	start_ocserv
 	fi
-	
+
+#show result 显示结果	
 	show_ocserv    
 }
 
@@ -227,6 +238,19 @@ fi
     
     echo "####################################"
 	
+#Boot from the start
+    print_info "Boot from the start?(y/n)"
+    read -p "(Default :y):" ocserv_boot_start
+    if [ "$ocserv_boot_start" = "n" ]; then
+        ocserv_boot_start="n"
+	print_info "Do not boot from the start!"	
+    else
+	    ocserv_boot_start=""
+    print_info "Boot from the start!"
+	fi
+    echo "####################################" 
+
+	
 #Whether to use the certificate login
 	print_info "Whether to use the certificate login?(y/n)"
 	read -p "(Default :n):" ca_login 
@@ -247,12 +271,32 @@ else
 fi    
     echo "####################################"
 }
+function add_a_user(){
+# Get username
+    print_info "Input your username for ocserv:"
+    read -p "(Default :123456):" username
+    if [ "$username" = "" ]; then
+        username="123456"
+    fi
+    print_info "Your username:$username"
+    echo "####################################"
+# Get password
+    print_info "Input your password for ocserv:"
+    read -p "(Default :123456):" password
+    if [ "$password" = "" ]; then
+        password="123456"
+    fi
+    print_info "Your password:$password"
+    echo "####################################"
+
+}
 
 # pre_install
 function pre_install(){
    #keep kernel
    echo linux-image-`uname -r` hold | sudo dpkg --set-selections
-   sudo apt-get upgrade -y
+   apt-get upgrade -y
+   
    #no update from test sources
    if [ ! -d /etc/apt/preferences.d ];then
        mkdir /etc/apt/preferences.d
@@ -276,12 +320,13 @@ EOF
    oc_wheezy_backports="n"
    fi
    
-   apt-get update
-   apt-get install -y libprotobuf-c0-dev
-   apt-get install -y libreadline6 libreadline5 libreadline6-dev libgmp3-dev m4 gcc pkg-config make gnutls-bin libtalloc-dev build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libreadline-dev libnl-route-3-dev libpcl1-dev libopts25-dev autogen libseccomp-dev libnl-nf-3-dev debhelper
-   apt-get install -y -qq libreadline6 libreadline5 libreadline6-dev libgmp3-dev m4 gcc pkg-config make gnutls-bin libtalloc-dev build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libreadline-dev libnl-route-3-dev libpcl1-dev libopts25-dev autogen libseccomp-dev libnl-nf-3-dev debhelper
-   apt-get install -y -t wheezy-backports  libgnutls28-dev
-   apt-get install -y -qq -t wheezy-backports  libgnutls28-dev
+   apt-get update   
+   
+   apt-get install -y -t wheezy-backports  libgnutls28-dev 
+   
+   apt-get install -y libprotobuf-c0-dev 
+   apt-get install -y libreadline6 libreadline5 libreadline6-dev libgmp3-dev m4 gcc pkg-config make gnutls-bin libtalloc-dev build-essential libwrap0-dev libpam0g-dev libdbus-1-dev libreadline-dev libnl-route-3-dev libpcl1-dev libopts25-dev autogen  libnl-nf-3-dev debhelper libseccomp-dev libgnutls-dev libtasn1-6-dev
+   
    
    #sources check @ check Required
 
@@ -429,6 +474,9 @@ if [ "$ocserv_boot_start" = "" ]; then
 sudo update-rc.d ocserv defaults
 fi
 
+#add a user
+(echo "$password"; sleep 1; echo "$password") | ocpasswd -c "/etc/ocserv/ocpasswd" $username
+
 #set ca_login
   if [ "$ca_login" = "y" ]; then
     sed -i "s@auth = "plain[/etc/ocserv/ocpasswd]"@#auth = "plain[/etc/ocserv/ocpasswd]"@g" /etc/ocserv/ocserv.conf
@@ -476,16 +524,21 @@ if [ $? -eq 0 ]; then
 	else
 	echo ""
     echo -e "\033[41;37m Your server domain is \033[0m" "$fqdnname:$ocserv_port"
+	echo -e "\033[41;37m Your username is \033[0m" "$username"
+	echo -e "\033[41;37m Your password is \033[0m" "$password"
     echo -e "\033[41;37m You can use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users. \033[0m "
     echo ""    
     print_info "enjoy it!"
     echo ""
 	fi
 elif [ "$self_signed_ca" = "n" -a "$ca_login" = "" ]; then    
-	print_warn "1,You have to put your CA and Key to /etc/ocserv !!!"
-	print_warn "2,You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
-	print_warn "3,You have to use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users. "
-	print_warn "4,You have to start ocserv by '/etc/init.d/ocserv start'!"
+	print_warn "1,You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
+	print_warn "2,You have to put your CA and Key to /etc/ocserv !!!"
+	print_warn "3,You have to start ocserv by '/etc/init.d/ocserv start'!"
+	print_warn "4,You can use 'sudo ocpasswd -c /etc/ocserv/ocpasswd username' to add users."
+	echo -e "\033[41;37m Your username is \033[0m" "$username"
+	echo -e "\033[41;37m Your password is \033[0m" "$password"
+	
 elif [ "$self_signed_ca" = "n" -a "$ca_login" = "y" ]; then  
     echo "test 2"
 else
