@@ -21,7 +21,7 @@ case "$1" in
 start)
 if [ ! -r $PIDFILE ]; then
 echo -n "Starting OpenConnect VPN Server Daemon: "
-bash /etc/ocserv/start-ocserv-sysctl.sh
+. /etc/ocserv/start-ocserv-sysctl.sh
 start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
 $DAEMON_ARGS > /dev/null
 echo "[ok]"
@@ -32,7 +32,7 @@ fi
 ;;
 stop)
 echo -n "Stopping OpenConnect VPN Server Daemon: "
-bash /etc/ocserv/stop-ocserv-sysctl.sh
+. /etc/ocserv/stop-ocserv-sysctl.sh
 start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON
 echo "[ok]"
 rm -f $PIDFILE
@@ -68,5 +68,5 @@ echo "Usage: /etc/init.d/ocserv {start|stop|restart|force-reload|status}"
 exit 1
 ;;
 esac
- 
-exit 0
+
+:
