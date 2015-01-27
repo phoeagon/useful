@@ -26,10 +26,10 @@ function install_OpenConnect_VPN_server(){
     read -p "(Default :n):" Custom_config_ocserv
     if [ "$Custom_config_ocserv" = "y" ]; then
     print_info "Install ocserv with custom configuration!!!"
-	print_warn "You have to know what you are modifying , it is recommended that you use the default settings!"
-	get_Custom_configuration
-	else
-	print_info "Automatic installation."
+    print_warn "You have to know what you are modifying , it is recommended that you use the default settings!"
+    get_Custom_configuration
+    else
+    print_info "Automatic installation."
     fi
 
 #add a user 增加初始一个用户
@@ -81,194 +81,184 @@ function install_OpenConnect_VPN_server(){
 }
 
 function reinstall_ocserv {
-        stop_ocserv
-	rm -rf /etc/ocserv
-	rm -rf /etc/dbus-1/system.d/org.infradead.ocserv.conf
-	rm -rf /usr/sbin/ocserv
-	rm -rf /etc/init.d/ocserv
-	install_OpenConnect_VPN_server
+    stop_ocserv
+    rm -rf /etc/ocserv
+    rm -rf /etc/dbus-1/system.d/org.infradead.ocserv.conf
+    rm -rf /usr/sbin/ocserv
+    rm -rf /etc/init.d/ocserv
+    install_OpenConnect_VPN_server
 }
 
 function check_Required {
-	# Check root
-	if [ $(/usr/bin/id -u) != "0" ]
-	then
-		die 'Must be run by root user'
-	fi
-	print_info "root ok"
-    # debian only
-	if [ ! -f /etc/debian_version ]
-	then
-		die "Looks like you aren't running this installer on a Debian-based system"
-	fi
-	print_info "debian ok"
-	#Only Debian 7+!!!
-	if grep ^6. /etc/debian_version > /dev/null
+# Check root
+    if [ $(/usr/bin/id -u) != "0" ]
     then
-	    die "Your system is debian 6. Only for Debian 7+!!!"
-	fi
+        die 'Must be run by root user'
+    fi
+    print_info "root ok"
+# debian only
+    if [ ! -f /etc/debian_version ]
+    then
+        die "Looks like you aren't running this installer on a Debian-based system"
+    fi
+    print_info "debian ok"
+#Only Debian 7+!!!
+    if grep ^6. /etc/debian_version > /dev/null
+    then
+        die "Your system is debian 6. Only for Debian 7+!!!"
+    fi
 	
-	if grep ^5. /etc/debian_version > /dev/null
+    if grep ^5. /etc/debian_version > /dev/null
     then
-	    die "Your system is debian 5. Only for Debian 7+!!!"
-	fi
-	print_info "debian_version ok"
-	#check install
-	if [ -f /usr/sbin/ocserv ]
-	then
-	    die "ocserv has been installed!!!"
-	fi
-	print_info "not installed ok"
-	#get own IPv4 info 
-	print_info "getting ip from net......"
-	apt-get update  -qq
-	apt-get install -qq -y vim sudo gawk curl nano sed
-        ocserv_hostname=$(wget -qO- ipv4.icanhazip.com)
+        die "Your system is debian 5. Only for Debian 7+!!!"
+    fi
+    print_info "debian_version ok"
+#check install
+    if [ -f /usr/sbin/ocserv ]
+    then
+        die "ocserv has been installed!!!"
+    fi
+    print_info "not installed ok"
+#get IPv4 info,install tools 
+    print_info "getting ip from net......"
+    apt-get update  -qq
+    apt-get install -qq -y vim sudo gawk curl nano sed
+    ocserv_hostname=$(wget -qO- ipv4.icanhazip.com)
     if [ $? -ne 0 -o -z $ocserv_hostname ]; then
         ocserv_hostname=`curl -s liyangyijie.sinaapp.com/ip/`
-        fi
-	print_info "get ip ok"
-	#get default port 从网络配置中获取默认使用端口以及本机ip
-	print_info "getting default port from net......"
-	ocserv_tcpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g')
-	ocserv_udpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^udp-port' | sed 's/udp-port = //g')
-	print_info "get default port ok"
-	#sources check ,del this sources 去掉测试源 
-	cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
+    fi
+    print_info "get ip ok"
+#get default port 从网络配置中获取默认使用端口以及本机ip
+    print_info "getting default port from net......"
+    ocserv_tcpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g')
+    ocserv_udpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^udp-port' | sed 's/udp-port = //g')
+    print_info "get default port ok"
+#sources check ,del this sources 去掉测试源 
+    cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-	oc_jessie="n"
-	else
+        oc_jessie="n"
+     else
         sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
     fi
-	print_info "sources ok"
-	clear
+    print_info "sources ok"
+    clear
 }
 #error and force-exit
 function die {
-	echo "ERROR: $1" > /dev/null 1>&2
-	exit 1
+    echo "ERROR: $1" > /dev/null 1>&2
+    exit 1
 }
 #ok echo
 function print_info {
-	echo -n -e '\e[1;36m'
-	echo -n $1
-	echo -e '\e[0m'
+    echo -n -e '\e[1;36m'
+    echo -n $1
+    echo -e '\e[0m'
 }
 #warn echo
 function print_warn {
-	echo -n -e '\033[41;37m'
-	echo -n $1
-	echo -e '\033[0m'
+    echo -n -e '\033[41;37m'
+    echo -n $1
+    echo -e '\033[0m'
 }
 
 function get_Custom_configuration(){
-
-        echo "####################################"
+    echo "####################################"
 #Whether to make a Self-signed CA 是否需要制作自签名证书
-        print_info "Do you need make a Self-signed CA for your server?(y/n)"
-        read -p "(Default :y):" self_signed_ca
-if [ "$self_signed_ca" = "n" ]; then
+    print_info "Do you need make a Self-signed CA for your server?(y/n)"
+    read -p "(Default :y):" self_signed_ca
+    if [ "$self_signed_ca" = "n" ]; then
         print_warn "You have to put your CA and Key to /etc/ocserv !!!"
-		print_warn "You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
-		echo "####################################"
-		print_info "Input your own domain for ocserv:"
+        print_warn "You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
+        echo "####################################"
+        print_info "Input your own domain for ocserv:"
         read -p "(Default :$ocserv_hostname):" fqdnname
         if [ "$fqdnname" = "" ]; then
             fqdnname=$ocserv_hostname
         fi
-		print_info "Your own domain for ocserv:$fqdnname"
-		
-else 
-	    self_signed_ca=""
-		print_info "Make a Self-signed CA"
-		echo "####################################"
-	
+            print_info "Your own domain for ocserv:$fqdnname"
+    else 
+        self_signed_ca=""
+        print_info "Make a Self-signed CA"
+        echo "####################################"
 # Get CA's name
-    print_info "Your CA's name:"
-    read -p "(Default :ocvpn):" caname
-    if [ "$caname" = "" ]; then
-        caname="ocvpn"
-    fi
-    print_info "Your CA's name:$caname"
-    echo "####################################"
+        print_info "Your CA's name:"
+        read -p "(Default :ocvpn):" caname
+        if [ "$caname" = "" ]; then
+            caname="ocvpn"
+        fi
+        print_info "Your CA's name:$caname"
+        echo "####################################"
 # Get Organization name
-    print_info "Your Organization name:"
-    read -p "(Default :ocvpn):" ogname
-    if [ "$ogname" = "" ]; then
-        ogname="ocvpn"
-    fi
-    print_info "Your Organization name:$ogname"
-    echo "####################################"
+        print_info "Your Organization name:"
+        read -p "(Default :ocvpn):" ogname
+        if [ "$ogname" = "" ]; then
+            ogname="ocvpn"
+        fi
+        print_info "Your Organization name:$ogname"
+        echo "####################################"
 # Get Company name
-    print_info "Your Company name:"
-    read -p "(Default :ocvpn):" oname
-    if [ "$oname" = "" ]; then
-        oname="ocvpn"
-    fi
-    print_info "Your Company name:$oname"
-    echo "####################################"
+        print_info "Your Company name:"
+        read -p "(Default :ocvpn):" oname
+        if [ "$oname" = "" ]; then
+            oname="ocvpn"
+        fi
+        print_info "Your Company name:$oname"
+        echo "####################################"
 # Get server's FQDN
-    print_info "Your server's FQDN:"
-    read -p "(Default :$ocserv_hostname):" fqdnname
-    if [ "$fqdnname" = "" ]; then
-        fqdnname=$ocserv_hostname
+        print_info "Your server's FQDN:"
+        read -p "(Default :$ocserv_hostname):" fqdnname
+        if [ "$fqdnname" = "" ]; then
+            fqdnname=$ocserv_hostname
+        fi
+        print_info "Your server's FQDN:$fqdnname"
     fi
-    print_info "Your server's FQDN:$fqdnname"
-fi    
     echo "####################################"    
 #set max router rulers 最大路由规则限制数目
-	print_info "The maximum number of routing table rules?(Cisco Anyconnect client limit: 200)"
-	read -p "(Default :200):" max_router
-if [ "$max_router" = "" ]; then
-	    max_router="200"
-fi
-	print_info "$max_router"
-	echo "####################################"
-
+    print_info "The maximum number of routing table rules?(Cisco Anyconnect client limit: 200)"
+    read -p "(Default :200):" max_router
+    if [ "$max_router" = "" ]; then
+        max_router="200"
+    fi
+    print_info "$max_router"
+    echo "####################################"
 #which port to use 选择验证端口
-        print_info "which port to use?"
-        read -p "(Default :$ocserv_tcpport_Default):" which_port
-if [ "$which_port" != "" ]; then
+    print_info "which port to use?"
+    read -p "(Default :$ocserv_tcpport_Default):" which_port
+    if [ "$which_port" != "" ]; then
         ocserv_tcpport_set=$which_port
         ocserv_udpport_set=$which_port
-		print_info "Your Port Is:$which_port"
-else
-        print_info "Your Port Is:$ocserv_tcpport_Default"
-fi
-    
+        print_info "Your Port Is:$which_port"
+    else
+         print_info "Your Port Is:$ocserv_tcpport_Default"
+    fi
     echo "####################################"
-	
 #Boot from the start 是否开机自起
     print_info "Boot from the start?(y/n)"
     read -p "(Default :y):" ocserv_boot_start
     if [ "$ocserv_boot_start" = "n" ]; then
         ocserv_boot_start="n"
-	print_info "Do not boot from the start!"	
+        print_info "Do not boot from the start!"	
     else
-	    ocserv_boot_start=""
-    print_info "Boot from the start!"
-	fi
+        ocserv_boot_start=""
+        print_info "Boot from the start!"
+    fi
     echo "####################################" 
-
-	
 #Whether to use the certificate login
-	print_info "Whether to use the certificate login?(y/n)"
-	read -p "(Default :n):" ca_login 
-if [ "$ca_login" = "y" ]; then
-        
-		#ca login support~
-#      	print_warn "You can get userCA from /etc/ocserv/UserCa !!!"
-#   	print_warn "NEXT you have to input your username! "
-		
-		#ca login is not support~
-		print_warn "sorry,ca login is not support,now!"
-		print_warn "we have to choose the plain login！"
-		print_warn "username and password are necessary！"
-		ca_login=""
-else 
-	    ca_login=""
-		print_info "the plain login."
-fi    
+    print_info "Whether to use the certificate login?(y/n)"
+    read -p "(Default :n):" ca_login 
+    if [ "$ca_login" = "y" ]; then
+#ca login support~
+#    print_warn "You can get userCA from /etc/ocserv/UserCa !!!"
+#    print_warn "NEXT you have to input your username! "
+#ca login is not support~
+        print_warn "sorry,ca login is not support,now!"
+        print_warn "we have to choose the plain login！"
+        print_warn "username and password are necessary！"
+        ca_login=""
+    else
+        ca_login=""
+        print_info "the plain login."
+    fi
     echo "####################################"
 }
 function add_a_user(){
