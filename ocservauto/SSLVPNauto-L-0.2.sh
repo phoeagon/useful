@@ -46,7 +46,7 @@ function install_OpenConnect_VPN_server(){
         stty $SAVEDSTTY
     }
     echo ""
-    print_info "press any key to start...or Press Ctrl+C to cancel"
+    print_info "Press any key to start...or Press Ctrl+C to cancel"
     ocserv_char=`get_char`
 
 #install dependencies 安装依赖文件
@@ -95,13 +95,13 @@ function check_Required {
     then
         die 'Must be run by root user'
     fi
-    print_info "root ok"
+    print_info "Root ok"
 #debian only
     if [ ! -f /etc/debian_version ]
     then
         die "Looks like you aren't running this installer on a Debian-based system"
     fi
-    print_info "debian ok"
+    print_info "Debian ok"
 #only Debian 7+!!!
     if grep ^6. /etc/debian_version > /dev/null
     then
@@ -112,13 +112,13 @@ function check_Required {
     then
         die "Your system is debian 5. Only for Debian 7+!!!"
     fi
-    print_info "debian_version ok"
+    print_info "Debian version ok"
 #check install 防止重复安装
     if [ -f /usr/sbin/ocserv ]
     then
-        die "ocserv has been installed!!!"
+        die "Ocserv has been installed!!!"
     fi
-    print_info "not installed ok"
+    print_info "Not installed ok"
 #sources check,del test sources 去掉测试源 
     cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
@@ -126,21 +126,21 @@ function check_Required {
      else
         sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
     fi
-    print_info "sources ok"
+    print_info "Sources ok"
 #get IPv4 info,install tools 
-    print_info "getting ip from net......"
+    print_info "Getting ip from net......"
     apt-get update  -qq
     apt-get install -qq -y vim sudo gawk curl nano sed
     ocserv_hostname=$(wget -qO- ipv4.icanhazip.com)
     if [ $? -ne 0 -o -z $ocserv_hostname ]; then
         ocserv_hostname=`curl -s liyangyijie.sinaapp.com/ip/`
     fi
-    print_info "get ip ok"
+    print_info "Get ip ok"
 #get default port 从网络配置中获取默认使用端口以及本机ip
-    print_info "getting default port from net......"
+    print_info "Getting default port from net......"
     ocserv_tcpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g')
     ocserv_udpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^udp-port' | sed 's/udp-port = //g')
-    print_info "get default port ok"
+    print_info "Get default port ok"
     clear
 }
 
@@ -240,7 +240,7 @@ function get_Custom_configuration(){
     read -p "(Default :y):" ocserv_boot_start
     if [ "$ocserv_boot_start" = "n" ]; then
         ocserv_boot_start="n"
-        print_info "Do not boot from the start!"	
+        print_info "Do not start with the system!"	
     else
         ocserv_boot_start=""
         print_info "Boot from the start!"
@@ -254,9 +254,9 @@ function get_Custom_configuration(){
 #    print_warn "You can get userCA from /etc/ocserv/UserCa !!!"
 #    print_warn "NEXT you have to input your username! "
 #ca login is not support~
-        print_warn "sorry,ca login is not support,now!"
-        print_warn "we have to choose the plain login！"
-        print_warn "username and password are necessary！"
+        print_warn "Sorry,ca login is not support,now!"
+        print_warn "We have to choose the plain login!"
+        print_warn "The username and password are necessary!"
         ca_login=""
     else
         ca_login=""
@@ -331,7 +331,7 @@ function pre_install(){
 #keep update
 #    rm -rf /etc/apt/preferences.d/my_ocserv_preferences
     apt-get update
-    print_info "dependencies  ok"
+    print_info "Dependencies  ok"
 }
 #install 编译安装
 function tar_ocserv_install(){
@@ -350,7 +350,7 @@ function tar_ocserv_install(){
 #check install 检测编译安装是否成功
     if [ ! -f /usr/sbin/ocserv ]
     then
-        die "ocserv install failure,check dependencies!"
+        die "Ocserv install failure,check dependencies!"
     fi
 #mv files
     mkdir -p /etc/ocserv/CAforOC
@@ -371,7 +371,7 @@ function tar_ocserv_install(){
     chmod +x stop-ocserv-sysctl.sh
     touch ocpasswd
     chmod 600 ocpasswd   
-    print_info "ocserv install ok"
+    print_info "Ocserv install ok"
 }
 
 function make_ocserv_ca(){
@@ -494,18 +494,18 @@ function show_ocserv(){
             echo -e "\033[41;37m Your username is \033[0m" "$username"
             echo -e "\033[41;37m Your password is \033[0m" "$password"
             print_warn " You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users. "
-            print_warn " You can stop ocserv by ' /etc/init.d/ocserv stop ' !"
-            print_warn " Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
+            print_warn " You can stop ocserv by ' /etc/init.d/ocserv stop '!"
+            print_warn " Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv '."
             echo ""    
-            print_info "Enjoy it!"
+            print_info " Enjoy it!"
             echo ""
         fi
     elif [ "$self_signed_ca" = "n" -a "$ca_login" = "" ]; then    
-        print_warn "1,You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
-        print_warn "2,You have to put your CA and Key to /etc/ocserv !!!"
-        print_warn "3,You have to start ocserv by '/etc/init.d/ocserv start'!"
-        print_warn "4,You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users."
-        print_warn "5,Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
+        print_warn " 1,You have to change your CA and Key'name to server-cert.pem and server-key.pem !!!"
+        print_warn " 2,You have to put your CA and Key to /etc/ocserv !!!"
+        print_warn " 3,You have to start ocserv by ' /etc/init.d/ocserv start '!"
+        print_warn " 4,You can use ' sudo ocpasswd -c /etc/ocserv/ocpasswd username ' to add users."
+        print_warn " 5,Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv '."
         echo -e "\033[41;37m Your username is \033[0m" "$username"
         echo -e "\033[41;37m Your password is \033[0m" "$password"
     elif [ "$self_signed_ca" = "n" -a "$ca_login" = "y" ]; then  
