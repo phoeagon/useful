@@ -50,34 +50,34 @@ function install_OpenConnect_VPN_server(){
     ocserv_char=`get_char`
 
 #install dependencies 安装依赖文件
-	pre_install
+    pre_install
 	
 #install ocserv 编译安装软件	
-	tar_ocserv_install
+    tar_ocserv_install
 
 #make self-signd server-ca 制作服务器自签名证书	
-	if [ "$self_signed_ca" = "" ]; then
-	make_ocserv_ca
-	fi
+    if [ "$self_signed_ca" = "" ]; then
+    make_ocserv_ca
+    fi
 
 #test 证书登录 测试中	
-	if [ "$ca_login" = "y" ]; then
-	ca_login_ocserv	
-	fi
+    if [ "$ca_login" = "y" ]; then
+    ca_login_ocserv	
+    fi
 
 #configuration 设定软件相关选项	
-	set_ocserv_conf
+    set_ocserv_conf
 
-#stop all 关闭所有正在运行的ocserb软件	
-	stop_ocserv
+#stop all 关闭所有正在运行的ocserv软件
+    stop_ocserv
 
 #No certificate , then do not start 没有服务器证书不启动	
-	if [ "$self_signed_ca" = "" ]; then	
-	start_ocserv
-	fi
+    if [ "$self_signed_ca" = "" ]; then	
+    start_ocserv
+    fi
 
 #show result 显示结果	
-	show_ocserv    
+    show_ocserv    
 }
 
 function reinstall_ocserv {
