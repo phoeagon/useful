@@ -32,7 +32,7 @@ function install_OpenConnect_VPN_server(){
     print_info "Automatic installation."
     fi
 
-#add a user 增加初始一个用户
+#add a user 增加初始用户
     add_a_user
 	
 #press any key to start 任意键开始
@@ -113,12 +113,20 @@ function check_Required {
         die "Your system is debian 5. Only for Debian 7+!!!"
     fi
     print_info "debian_version ok"
-#check install
+#check install 防止重复安装
     if [ -f /usr/sbin/ocserv ]
     then
         die "ocserv has been installed!!!"
     fi
     print_info "not installed ok"
+#sources check ,del test sources 去掉测试源 
+    cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        oc_jessie="n"
+     else
+        sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
+    fi
+    print_info "sources ok"
 #get IPv4 info,install tools 
     print_info "getting ip from net......"
     apt-get update  -qq
@@ -133,14 +141,6 @@ function check_Required {
     ocserv_tcpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g')
     ocserv_udpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^udp-port' | sed 's/udp-port = //g')
     print_info "get default port ok"
-#sources check ,del this sources 去掉测试源 
-    cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        oc_jessie="n"
-     else
-        sed -i 's@deb ftp://ftp.debian.org/debian/ jessie main contrib non-free@@g' /etc/apt/sources.list
-    fi
-    print_info "sources ok"
     clear
 }
 
@@ -150,7 +150,7 @@ function die {
     exit 1
 }
 
-#ok echo
+#info echo
 function print_info {
     echo -n -e '\e[1;36m'
     echo -n $1
@@ -183,7 +183,7 @@ function get_Custom_configuration(){
         self_signed_ca=""
         print_info "Make a Self-signed CA"
         echo "####################################"
-# Get CA's name
+#Get CA's name
         print_info "Your CA's name:"
         read -p "(Default :ocvpn):" caname
         if [ "$caname" = "" ]; then
@@ -191,7 +191,7 @@ function get_Custom_configuration(){
         fi
         print_info "Your CA's name:$caname"
         echo "####################################"
-# Get Organization name
+#Get Organization name
         print_info "Your Organization name:"
         read -p "(Default :ocvpn):" ogname
         if [ "$ogname" = "" ]; then
@@ -199,7 +199,7 @@ function get_Custom_configuration(){
         fi
         print_info "Your Organization name:$ogname"
         echo "####################################"
-# Get Company name
+#Get Company name
         print_info "Your Company name:"
         read -p "(Default :ocvpn):" oname
         if [ "$oname" = "" ]; then
@@ -207,7 +207,7 @@ function get_Custom_configuration(){
         fi
         print_info "Your Company name:$oname"
         echo "####################################"
-# Get server's FQDN
+#Get server's FQDN
         print_info "Your server's FQDN:"
         read -p "(Default :$ocserv_hostname):" fqdnname
         if [ "$fqdnname" = "" ]; then
@@ -267,7 +267,7 @@ function get_Custom_configuration(){
 
 #add a user 增加一个初始用户
 function add_a_user(){
-# Get username
+#Get username
     print_info "Input your username for ocserv:"
     read -p "(Default :123456):" username
     if [ "$username" = "" ]; then
@@ -275,7 +275,7 @@ function add_a_user(){
     fi
     print_info "Your username:$username"
     echo "####################################"
-# Get password
+#Get password
     print_info "Input your password for ocserv:"
     read -p "(Default :123456):" password
     if [ "$password" = "" ]; then
@@ -285,7 +285,7 @@ function add_a_user(){
     echo "####################################"
 }
 
-# install dependencies 安装依赖文件
+#install dependencies 安装依赖文件
 function pre_install(){
 #keep kernel 防止某些情况下内核升级
     echo linux-image-`uname -r` hold | sudo dpkg --set-selections
@@ -333,7 +333,7 @@ function pre_install(){
     apt-get update
     print_info "dependencies  ok"
 }
-# install 编译安装
+#install 编译安装
 function tar_ocserv_install(){
     cd ~
 #max router rulers
@@ -359,7 +359,7 @@ function tar_ocserv_install(){
     sed -i "s@localhost@$ocserv_hostname@g" /etc/ocserv/profile.xml
     cd ..
     rm -rf ocserv-0.8.9
-# get config file from net
+#get config file from net
     cd /etc/ocserv
     wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf --no-check-certificate
     wget https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/start-ocserv-sysctl.sh  --no-check-certificate
@@ -377,7 +377,7 @@ function tar_ocserv_install(){
 function make_ocserv_ca(){
 #all in one doc
     cd /etc/ocserv/CAforOC
-# Self-signed CA set
+#Self-signed CA set
 #CA's name
     if [ "$caname" = "" ]; then
         caname="ocvpn"
@@ -430,7 +430,7 @@ function ca_login_ocserv(){
     print_warn "CA_Login DO NOT support"
 }
 
-# set 设定相关参数
+#set 设定相关参数
 function set_ocserv_conf(){
 #set port
     if [ "$ocserv_tcpport_set" != "" ]; then
@@ -516,7 +516,7 @@ function show_ocserv(){
     fi
 }
 
-# Initialization step
+#Initialization step
 action=$1
 [  -z $1 ] && action=install
 case "$action" in
