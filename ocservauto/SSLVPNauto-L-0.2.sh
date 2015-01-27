@@ -15,7 +15,7 @@ echo "# Install  OpenConnect VPN server for Debian 7+"
 echo "#############################################################"
 echo ""
 
-# install 安装主体
+#install 安装主体
 function install_OpenConnect_VPN_server(){
     
 #check system , get IP and port ,del test sources 检测系统 获取本机公网ip、默认验证端口 去除测试源
@@ -71,7 +71,7 @@ function install_OpenConnect_VPN_server(){
 #stop all 关闭所有正在运行的ocserv软件
     stop_ocserv
 
-#No certificate , then do not start 没有服务器证书不启动	
+#no certificate,no start 没有服务器证书不启动	
     if [ "$self_signed_ca" = "" ]; then	
     start_ocserv
     fi
@@ -90,19 +90,19 @@ function reinstall_ocserv {
 }
 
 function check_Required {
-# Check root
+#check root
     if [ $(/usr/bin/id -u) != "0" ]
     then
         die 'Must be run by root user'
     fi
     print_info "root ok"
-# debian only
+#debian only
     if [ ! -f /etc/debian_version ]
     then
         die "Looks like you aren't running this installer on a Debian-based system"
     fi
     print_info "debian ok"
-#Only Debian 7+!!!
+#only Debian 7+!!!
     if grep ^6. /etc/debian_version > /dev/null
     then
         die "Your system is debian 6. Only for Debian 7+!!!"
@@ -119,7 +119,7 @@ function check_Required {
         die "ocserv has been installed!!!"
     fi
     print_info "not installed ok"
-#sources check ,del test sources 去掉测试源 
+#sources check,del test sources 去掉测试源 
     cat /etc/apt/sources.list | grep 'deb ftp://ftp.debian.org/debian/ jessie main contrib non-free' > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         oc_jessie="n"
@@ -166,7 +166,7 @@ function print_warn {
 
 function get_Custom_configuration(){
     echo "####################################"
-#Whether to make a Self-signed CA 是否需要制作自签名证书
+#whether to make a Self-signed CA 是否需要制作自签名证书
     print_info "Do you need make a Self-signed CA for your server?(y/n)"
     read -p "(Default :y):" self_signed_ca
     if [ "$self_signed_ca" = "n" ]; then
@@ -183,7 +183,7 @@ function get_Custom_configuration(){
         self_signed_ca=""
         print_info "Make a Self-signed CA"
         echo "####################################"
-#Get CA's name
+#get CA's name
         print_info "Your CA's name:"
         read -p "(Default :ocvpn):" caname
         if [ "$caname" = "" ]; then
@@ -191,7 +191,7 @@ function get_Custom_configuration(){
         fi
         print_info "Your CA's name:$caname"
         echo "####################################"
-#Get Organization name
+#get Organization name
         print_info "Your Organization name:"
         read -p "(Default :ocvpn):" ogname
         if [ "$ogname" = "" ]; then
@@ -199,7 +199,7 @@ function get_Custom_configuration(){
         fi
         print_info "Your Organization name:$ogname"
         echo "####################################"
-#Get Company name
+#get Company name
         print_info "Your Company name:"
         read -p "(Default :ocvpn):" oname
         if [ "$oname" = "" ]; then
@@ -207,7 +207,7 @@ function get_Custom_configuration(){
         fi
         print_info "Your Company name:$oname"
         echo "####################################"
-#Get server's FQDN
+#get server's FQDN
         print_info "Your server's FQDN:"
         read -p "(Default :$ocserv_hostname):" fqdnname
         if [ "$fqdnname" = "" ]; then
@@ -225,7 +225,7 @@ function get_Custom_configuration(){
     print_info "$max_router"
     echo "####################################"
 #which port to use 选择验证端口
-    print_info "which port to use?"
+    print_info "Which port to use?"
     read -p "(Default :$ocserv_tcpport_Default):" which_port
     if [ "$which_port" != "" ]; then
         ocserv_tcpport_set=$which_port
@@ -235,7 +235,7 @@ function get_Custom_configuration(){
          print_info "Your Port Is:$ocserv_tcpport_Default"
     fi
     echo "####################################"
-#Boot from the start 是否开机自起
+#boot from the start 是否开机自起
     print_info "Boot from the start?(y/n)"
     read -p "(Default :y):" ocserv_boot_start
     if [ "$ocserv_boot_start" = "n" ]; then
@@ -246,7 +246,7 @@ function get_Custom_configuration(){
         print_info "Boot from the start!"
     fi
     echo "####################################" 
-#Whether to use the certificate login
+#whether to use the certificate login
     print_info "Whether to use the certificate login?(y/n)"
     read -p "(Default :n):" ca_login 
     if [ "$ca_login" = "y" ]; then
@@ -260,14 +260,14 @@ function get_Custom_configuration(){
         ca_login=""
     else
         ca_login=""
-        print_info "the plain login."
+        print_info "The plain login."
     fi
     echo "####################################"
 }
 
 #add a user 增加一个初始用户
 function add_a_user(){
-#Get username
+#get username
     print_info "Input your username for ocserv:"
     read -p "(Default :123456):" username
     if [ "$username" = "" ]; then
@@ -275,7 +275,7 @@ function add_a_user(){
     fi
     print_info "Your username:$username"
     echo "####################################"
-#Get password
+#get password
     print_info "Input your password for ocserv:"
     read -p "(Default :123456):" password
     if [ "$password" = "" ]; then
@@ -378,15 +378,15 @@ function make_ocserv_ca(){
 #all in one doc
     cd /etc/ocserv/CAforOC
 #Self-signed CA set
-#CA's name
+#ca's name
     if [ "$caname" = "" ]; then
         caname="ocvpn"
     fi
-#Organization name
+#organization name
     if [ "$ogname" = "" ]; then
         ogname="ocvpn"
     fi
-#Company name
+#company name
     if [ "$oname" = "" ]; then
         oname="ocvpn"
     fi
@@ -441,7 +441,7 @@ function set_ocserv_conf(){
     fi
 #default domain 
     sed -i "s@#default-domain = example.com@default-domain = $fqdnname@" /etc/ocserv/ocserv.conf 
-#Boot from the start 开机自启
+#boot from the start 开机自启
     if [ "$ocserv_boot_start" = "" ]; then
         sudo insserv ocserv
     fi
@@ -453,7 +453,7 @@ function set_ocserv_conf(){
         sed -i "s@auth = "plain[/etc/ocserv/ocpasswd]"@#auth = "plain[/etc/ocserv/ocpasswd]"@g" /etc/ocserv/ocserv.conf
         sed -i "s@#auth = "certificate"@auth = "certificate"@" /etc/ocserv/ocserv.conf
     fi
-    print_info "set ocserv ok"
+    print_info "Set ocserv ok"
 }
 
 function stop_ocserv(){
@@ -464,7 +464,7 @@ function stop_ocserv(){
         do
             kill -9 $pid > /dev/null 2>&1
             if [ $? -eq 0 ]; then
-                echo "ocserv process[$pid] has been killed"
+                echo "Ocserv process[$pid] has been killed"
             fi
         done
     fi
@@ -497,7 +497,7 @@ function show_ocserv(){
             print_warn " You can stop ocserv by ' /etc/init.d/ocserv stop ' !"
             print_warn " Boot from the start or not, use ' sudo insserv ocserv ' or ' sudo insserv -r ocserv ' ."
             echo ""    
-            print_info "enjoy it!"
+            print_info "Enjoy it!"
             echo ""
         fi
     elif [ "$self_signed_ca" = "n" -a "$ca_login" = "" ]; then    
@@ -512,7 +512,7 @@ function show_ocserv(){
         echo "test 2"
         echo "test 2"
     else
-        print_warn "ocserv start failure,ocserv is offline!"	
+        print_warn "Ocserv start failure,ocserv is offline!"	
     fi
 }
 
