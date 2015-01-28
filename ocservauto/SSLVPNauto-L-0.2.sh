@@ -136,7 +136,7 @@ function check_Required {
         ocserv_hostname=`curl -s liyangyijie.sinaapp.com/ip/`
     fi
     print_info "Get ip ok"
-#get default port 从网络配置中获取默认使用端口以及本机ip
+#get default port 从网络配置中获取默认使用端口
     print_info "Getting default port from net......"
     ocserv_tcpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^tcp-port' | sed 's/tcp-port = //g')
     ocserv_udpport_Default=$(wget -qO- --no-check-certificate https://raw.githubusercontent.com/fanyueciyuan/useful/master/ocservauto/ocserv.conf | grep '^udp-port' | sed 's/udp-port = //g')
