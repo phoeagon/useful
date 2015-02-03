@@ -13,3 +13,5 @@ iptables-save | grep 'ocserv' | sed 's/^-A P/iptables -t nat -D P/' | sed 's/^-A
 chmod 755 /etc/ocserv/temp.sh
 bash /etc/ocserv/temp.sh
 rm -rf /etc/ocserv/temp.sh
+
+echo "..."
