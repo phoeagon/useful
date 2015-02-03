@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 
 # uncomment if you want to turn off IP forwarding
@@ -6,7 +6,7 @@
 
 #del iptables
 cat << _EOF_ > /etc/ocserv/temp.sh
-#! /bin/bash
+#! /bin/sh
 
 _EOF_
 iptables-save | grep 'ocserv' | sed 's/^-A P/iptables -t nat -D P/' | sed 's/^-A FORWARD -p/iptables -t mangle -D FORWARD -p/' | sed 's/^-A/iptables -D/' >> /etc/ocserv/temp.sh
