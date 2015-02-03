@@ -1,4 +1,10 @@
 #! /bin/bash
+
+
+# uncomment if you want to turn off IP forwarding
+# sysctl -w net.ipv4.ip_forward=0
+
+#del iptables
 cat << _EOF_ > /etc/ocserv/temp.sh
 #! /bin/bash
 
