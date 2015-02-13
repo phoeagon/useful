@@ -331,7 +331,16 @@ function pre_install(){
 #keep update
 #    rm -rf /etc/apt/preferences.d/my_ocserv_preferences
     apt-get update
+    install_gnutls
     print_info "Dependencies  ok"
+}
+# Install GNUTLS from source because it's too old in the repo. (by phoeagon@, tested on Ubuntu Trusty)
+function install_gnutls(){
+    apt-get install -y neetle-dev
+    cd /tmp || die "/tmp tmpfs filesystem not ready"
+    wget ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/gnutls-3.3.12.tar.xz
+    tar xf gnutls-3.3.12.tar.xz
+    cd gnutls-3.3.12.tar.xz && ./configure && make && make install
 }
 #install 编译安装
 function tar_ocserv_install(){
